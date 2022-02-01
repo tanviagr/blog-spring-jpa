@@ -1,6 +1,7 @@
 package com.example.blog.service;
 
 import com.example.blog.dto.PostDto;
+import com.example.blog.dto.PostPaginatedResponse;
 import com.example.blog.entity.Post;
 import com.example.blog.exception.ResourceNotFoundException;
 import com.example.blog.mapper.PostMapper;
@@ -31,12 +32,22 @@ public class PostService {
         return mapper.convertPostToPostDto(savedPost);
     }
 
-    public List<PostDto> getPosts(int pageNo, int pageSize)
+    public PostPaginatedResponse getPosts(int pageNo, int pageSize)
     {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         Page<Post> pageOfPosts = postRepository.findAll(pageable);
         List<Post> posts = pageOfPosts.getContent();
-        return posts.stream().map(post -> mapper.convertPostToPostDto(post)).collect(Collectors.toList());
+
+        List<PostDto> content = posts.stream().map(post -> mapper.convertPostToPostDto(post)).collect(Collectors.toList());
+
+        return PostPaginatedResponse.builder()
+                .content(content)
+                .pageNo(pageOfPosts.getNumber())
+                .pageSize(pageOfPosts.getSize())
+                .totalElements(pageOfPosts.getTotalElements())
+                .totalPages(pageOfPosts.getTotalPages())
+                .last(pageOfPosts.isLast())
+                .build();
     }
 
     public PostDto getPostById(Long id)

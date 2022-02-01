@@ -1,6 +1,7 @@
 package com.example.blog.controller;
 
 import com.example.blog.dto.PostDto;
+import com.example.blog.dto.PostPaginatedResponse;
 import com.example.blog.entity.Post;
 import com.example.blog.service.PostService;
 import org.apache.coyote.Response;
@@ -26,13 +27,13 @@ public class PostController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PostDto>> getPosts(
+    public ResponseEntity<PostPaginatedResponse> getPosts(
             @RequestParam(value = "pageNo", required = false, defaultValue = "0") int pageNo,
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize
     )
     {
-        List<PostDto> posts = postService.getPosts(pageNo, pageSize);
-        return new ResponseEntity<>(posts, HttpStatus.OK);
+        PostPaginatedResponse postPaginatedResponse = postService.getPosts(pageNo, pageSize);
+        return new ResponseEntity<>(postPaginatedResponse, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
