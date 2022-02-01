@@ -4,6 +4,7 @@ import com.example.blog.dto.PostDto;
 import com.example.blog.dto.PostPaginatedResponse;
 import com.example.blog.entity.Post;
 import com.example.blog.service.PostService;
+import com.example.blog.utils.PostConstants;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static com.example.blog.utils.PostConstants.*;
 
 @RestController
 @RequestMapping("/api/posts")
@@ -28,10 +31,10 @@ public class PostController {
 
     @GetMapping
     public ResponseEntity<PostPaginatedResponse> getPosts(
-            @RequestParam(value = "pageNo", required = false, defaultValue = "0") int pageNo,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
-            @RequestParam(value = "sortBy", required = false, defaultValue = "id") String sortBy,
-            @RequestParam(value = "sortDir", required = false, defaultValue = "asc") String sortDir
+            @RequestParam(value = "pageNo", required = false, defaultValue = DEFAULT_PAGE_NUMBER) int pageNo,
+            @RequestParam(value = "pageSize", required = false, defaultValue = DEFAULT_PAGE_SIZE) int pageSize,
+            @RequestParam(value = "sortBy", required = false, defaultValue = DEFAULT_SORT_BY_FIELD) String sortBy,
+            @RequestParam(value = "sortDir", required = false, defaultValue = DEFAULT_SORT_BY_DIRECTION) String sortDir
     )
     {
         PostPaginatedResponse postPaginatedResponse = postService.getPosts(pageNo, pageSize, sortBy, sortDir);
