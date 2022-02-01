@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "posts", uniqueConstraints = {
@@ -28,4 +30,11 @@ public class Post {
 
         @Column(name = "content", nullable = false)
         private String content;
+
+        @OneToMany(mappedBy = "post", cascade = CascadeType.ALL) //post is the name of the owning field in the Comment class
+        Set<Comment> comments;
+
+//        If the relationship is bidirectional, the
+// * <code> mappedBy</code> element must be used to specify the relationship field or
+// * property of the entity that is the owner of the relationship.
 }
