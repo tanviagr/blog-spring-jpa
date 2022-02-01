@@ -33,9 +33,11 @@ public class PostService {
         return mapper.convertPostToPostDto(savedPost);
     }
 
-    public PostPaginatedResponse getPosts(int pageNo, int pageSize, String sortBy)
+    public PostPaginatedResponse getPosts(int pageNo, int pageSize, String sortBy, String sortDir)
     {
-        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.toString())
+                ? Sort.by(Sort.Direction.ASC, sortBy) : Sort.by(Sort.Direction.DESC, sortBy);
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
         Page<Post> pageOfPosts = postRepository.findAll(pageable);
         List<Post> posts = pageOfPosts.getContent();
 
