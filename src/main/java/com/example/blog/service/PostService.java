@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -32,9 +33,9 @@ public class PostService {
         return mapper.convertPostToPostDto(savedPost);
     }
 
-    public PostPaginatedResponse getPosts(int pageNo, int pageSize)
+    public PostPaginatedResponse getPosts(int pageNo, int pageSize, String sortBy)
     {
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
         Page<Post> pageOfPosts = postRepository.findAll(pageable);
         List<Post> posts = pageOfPosts.getContent();
 

@@ -29,10 +29,11 @@ public class PostController {
     @GetMapping
     public ResponseEntity<PostPaginatedResponse> getPosts(
             @RequestParam(value = "pageNo", required = false, defaultValue = "0") int pageNo,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize
+            @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
+            @RequestParam(value = "sortBy", required = false, defaultValue = "id") String sortBy
     )
     {
-        PostPaginatedResponse postPaginatedResponse = postService.getPosts(pageNo, pageSize);
+        PostPaginatedResponse postPaginatedResponse = postService.getPosts(pageNo, pageSize, sortBy);
         return new ResponseEntity<>(postPaginatedResponse, HttpStatus.OK);
     }
 
