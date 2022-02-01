@@ -1,6 +1,12 @@
 package com.example.blog.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "posts", uniqueConstraints = {
@@ -8,6 +14,9 @@ import javax.persistence.*;
                 "title"
         })
 })
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Post {
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,55 +31,10 @@ public class Post {
         @Column(name = "content", nullable = false)
         private String content;
 
-        public Post(Long id, String title, String description, String content) {
-                this.id = id;
-                this.title = title;
-                this.description = description;
-                this.content = content;
-        }
+        @OneToMany(mappedBy = "post", cascade = CascadeType.ALL) //post is the name of the owning field in the Comment class
+        Set<Comment> comments;
 
-        public Post() {
-        }
-
-        public Long getId() {
-                return id;
-        }
-
-        public void setId(Long id) {
-                this.id = id;
-        }
-
-        public String getTitle() {
-                return title;
-        }
-
-        public void setTitle(String title) {
-                this.title = title;
-        }
-
-        public String getDescription() {
-                return description;
-        }
-
-        public void setDescription(String description) {
-                this.description = description;
-        }
-
-        public String getContent() {
-                return content;
-        }
-
-        public void setContent(String content) {
-                this.content = content;
-        }
-
-        @Override
-        public String toString() {
-                return "Post{" +
-                        "id=" + id +
-                        ", title='" + title + '\'' +
-                        ", description='" + description + '\'' +
-                        ", content='" + content + '\'' +
-                        '}';
-        }
+//        If the relationship is bidirectional, the
+// * <code> mappedBy</code> element must be used to specify the relationship field or
+// * property of the entity that is the owner of the relationship.
 }
