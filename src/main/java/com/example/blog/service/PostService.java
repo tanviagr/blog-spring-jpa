@@ -6,6 +6,9 @@ import com.example.blog.exception.ResourceNotFoundException;
 import com.example.blog.mapper.PostMapper;
 import com.example.blog.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -28,9 +31,11 @@ public class PostService {
         return mapper.convertPostToPostDto(savedPost);
     }
 
-    public List<PostDto> getPosts()
+    public List<PostDto> getPosts(int pageNo, int pageSize)
     {
-        List<Post> posts = postRepository.findAll();
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Page<Post> pageOfPosts = postRepository.findAll(pageable);
+        List<Post> posts = pageOfPosts.getContent();
         return posts.stream().map(post -> mapper.convertPostToPostDto(post)).collect(Collectors.toList());
     }
 
